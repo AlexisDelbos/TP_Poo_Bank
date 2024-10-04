@@ -1,6 +1,8 @@
 package fr.fms.entities;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Account {
 
@@ -8,6 +10,17 @@ public class Account {
 	private Date dateCreateAccount;
 	private double balanceAccount;
 	protected User user;
+	private List<Transaction> transactions;
+	public List<Account> accountList;
+
+	public Account(int idAccount, Date dateCreateAccount, double balanceAccount, User user,
+			List<Transaction> transactions) {
+		this.idAccount = idAccount;
+		this.dateCreateAccount = dateCreateAccount;
+		this.balanceAccount = balanceAccount;
+		this.user = user;
+		this.transactions = new ArrayList<>();
+	}
 
 	public Account(int idAccount, Date dateCreateAccount, double balanceAccount) {
 		this.idAccount = idAccount;
@@ -20,6 +33,9 @@ public class Account {
 		this.dateCreateAccount = dateCreateAccount;
 		this.balanceAccount = balanceAccount;
 		this.user = user;
+	}
+
+	public Account() {
 	}
 
 	public Integer getIdAccount() {
@@ -52,6 +68,14 @@ public class Account {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public List<Transaction> getTransactions() {
+		return transactions;
+	}
+
+	public void setTransactions(List<Transaction> transactions) {
+		this.transactions = transactions;
 	}
 
 }
