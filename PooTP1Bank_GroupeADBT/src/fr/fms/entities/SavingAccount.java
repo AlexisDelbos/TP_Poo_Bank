@@ -1,12 +1,13 @@
 package fr.fms.entities;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class SavingAccount extends Account {
 
 	// Taux d'interet
 	private double interestRate;
-	private User user;
 
 	// Constructeur
 	public SavingAccount(int idAccount, Date dateCreateAccount, double balanceAccount, double interestRate) {
@@ -22,8 +23,12 @@ public class SavingAccount extends Account {
 	}
 
 	public String toString() {
-		return String.format("SavingAccount [accountId= %s, creationDate= %s, balance= %,f , %s , rate= %f %n",
-				getIdAccount(), getDateCreateAccount(), getBalanceAccount(), getUser().toString(), getInterestRate());
+		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+		DecimalFormat df = new DecimalFormat("#.00");
+
+		return String.format("SavingAccount [accountId= %s, creationDate= %s, balance= %s, %n %s , rate= %f %n",
+				getIdAccount(), dt.format(getDateCreateAccount()), df.format(getBalanceAccount()), getUser().toString(),
+				getInterestRate());
 	}
 
 	public double getInterestRate() {
@@ -32,14 +37,6 @@ public class SavingAccount extends Account {
 
 	public void setInterestRate(double interestRate) {
 		this.interestRate = interestRate;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
 	}
 
 }

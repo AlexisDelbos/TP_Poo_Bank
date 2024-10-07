@@ -1,5 +1,7 @@
 package fr.fms.entities;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class CurrentAccount extends Account {
@@ -19,9 +21,11 @@ public class CurrentAccount extends Account {
 
 	@Override
 	public String toString() {
+		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+		DecimalFormat df = new DecimalFormat("#.00");
 		return String.format(
-				"CurrentAccount [accountId= %s, creationDate= %s, balance= %.2f,  user= %s, authorizedOverdraft= %.2f]",
-				getIdAccount(), getDateCreateAccount(), getBalanceAccount(), getUser().toString(),
+				"CurrentAccount [accountId= %s, creationDate= %s, balance= %s, %n %s, authorizedOverdraft= %.2f]",
+				getIdAccount(), dt.format(getDateCreateAccount()), df.format(getBalanceAccount()), getUser().toString(),
 				getAuthorizedOverdraft());
 	}
 
@@ -32,4 +36,5 @@ public class CurrentAccount extends Account {
 	public void setAuthorizedOverdraft(double authorizedOverdraft) {
 		this.authorizedOverdraft = authorizedOverdraft;
 	}
+
 }
