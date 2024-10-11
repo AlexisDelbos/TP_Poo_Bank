@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.security.auth.login.AccountNotFoundException;
+
 import fr.fms.entities.Account;
 import fr.fms.entities.CurrentAccount;
 import fr.fms.entities.SavingAccount;
@@ -55,7 +57,7 @@ public class IBankImpl implements IBank {
 	}
 
 	// Retirer de l'argent d'un compte
-	public void withdraw(int accountId, double amount) {
+	public void withdraw(int accountId, double amount) throws AccountNotFoundException, Exception {
 		Account account = accounts.get(accountId);
 		if (account != null) {
 
@@ -65,7 +67,7 @@ public class IBankImpl implements IBank {
 					account.setBalanceAccount(account.getBalanceAccount() - amount);
 					new Withdraw(new Date(), -amount, account);
 				} else {
-					System.out.println("Fonds insuffisants !");
+					throw new Exception("Fonds insuffisants");
 				}
 			} else if (account instanceof SavingAccount) {
 				if (account.getBalanceAccount() - amount > 0) {
@@ -73,11 +75,11 @@ public class IBankImpl implements IBank {
 					new Withdraw(new Date(), -amount, account);
 
 				} else {
-					System.out.println("Fonds insuffisants !");
+					throw new Exception("Fonds insuffisants");
 				}
 			}
 		} else {
-			System.out.println("Compte non trouvé !");
+			throw new AccountNotFoundException("Compte non trouvé");
 		}
 	}
 
@@ -90,33 +92,33 @@ public class IBankImpl implements IBank {
 			System.out.println("Un des comptes n'existe pas !");
 			return;
 		}
-
 		if (startAccountId == destinationAccountId) {
 			System.out.println("Vous ne pouvez pas retirer et verser sur le même compte.");
 			return;
 		}
-
+		// Retrait Compte Courant
 		if (startAccount instanceof CurrentAccount) {
 			CurrentAccount currentAccount = (CurrentAccount) startAccount;
 			if (currentAccount.getBalanceAccount() - amount >= -currentAccount.getAuthorizedOverdraft()) {
 				currentAccount.setBalanceAccount(currentAccount.getBalanceAccount() - amount);
+				new Withdraw(new Date(), -amount, startAccount);
 			} else {
 				System.out.println("Fonds insuffisants sur le compte courant !");
 				return;
 			}
+			// Retrait Compte Epargne
 		} else if (startAccount instanceof SavingAccount) {
 			if (startAccount.getBalanceAccount() - amount >= 0) {
 				startAccount.setBalanceAccount(startAccount.getBalanceAccount() - amount);
+				new Withdraw(new Date(), -amount, startAccount);
 			} else {
 				System.out.println("Fonds insuffisants sur le compte d'épargne !");
 				return;
 			}
 		}
+		// Dépot compte destination
 		destinationAccount.setBalanceAccount(destinationAccount.getBalanceAccount() + amount);
-
-		// System.out.printf("Transfert de %.2f effectué de %s à %s.%n", amount,
-		// startAccount.getUser().getFirstnameUser(),
-		// destinationAccount.getUser().getFirstnameUser());
+		new Transfert(new Date(), amount, destinationAccount);
 	}
 
 	public void listAllAccounts() {
@@ -134,7 +136,8 @@ public class IBankImpl implements IBank {
 	}
 
 	// Afficher d'un compte
-	public void listTransactionOfAccount(int accountId) {
+	public void displayAccountTransactions(int accountId) {
+
 		ArrayList<Transaction> transactions = Transaction.listTransaction(accountId);
 		for (Transaction transaction : transactions) {
 			System.out.println(transaction);
@@ -144,11 +147,11 @@ public class IBankImpl implements IBank {
 	}
 
 	// Afficher d'une personne
-	public void listOfUserAccount(User user) {
+	public void getTransactionsListByAccID(User user) {
 
 		for (Account account : accounts.values()) {
 			if (account.getUser().equals(user)) {
-				listTransactionOfAccount(account.getIdAccount());
+				displayAccountTransactions(account.getIdAccount());
 
 			}
 		}

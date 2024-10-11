@@ -22,13 +22,14 @@ public class MyBankApp {
 		CurrentAccount firstAccount = new CurrentAccount(100200300, new Date(), 1500, 200, robert);
 		SavingAccount secondAccount = new SavingAccount(200300400, new Date(), 2000, 5.5, julie);
 
+		System.out.println("---- Affichage des comptes ----");
 		System.out.println(firstAccount);
 		System.out.println(secondAccount);
 
 		bankJob.addAccount(firstAccount);
 		bankJob.addAccount(secondAccount);
 
-		System.out.println("-------------------");
+		System.out.println("---- Solde ----");
 		System.out.printf("Solde de %s : %s %n", firstAccount.getUser().getFirstnameUser(),
 				firstAccount.getBalanceAccount());
 
@@ -38,7 +39,14 @@ public class MyBankApp {
 		System.out.println("----Test erreur----");
 
 		System.out.println(bankJob.consultAccount(11111111));
-		bankJob.withdraw(100200300, 20000);
+		try {
+
+			bankJob.withdraw(100200300, 20000);
+		} catch (javax.security.auth.login.AccountNotFoundException ae) {
+			System.out.println("Erreur de compte " + ae.getMessage());
+		} catch (Exception e) {
+			System.out.println("Exception " + e.getMessage());
+		}
 		bankJob.transferMoney(100200300, 100200300, 200);
 
 		System.out.println("---- Liste des comptes de ma banque ----");
@@ -52,16 +60,16 @@ public class MyBankApp {
 
 		System.out.println("---- Transaction de robert ---- ");
 
-		bankJob.withdraw(firstAccount.getIdAccount(), 200);
+		// bankJob.withdraw(firstAccount.getIdAccount(), 200);
 		bankJob.deposit(firstAccount.getIdAccount(), 500);
-		bankJob.listOfUserAccount(robert);
+		bankJob.getTransactionsListByAccID(robert);
 
 		System.out.printf("--- Liste des transactions du compte n° %d de %s ---- %n", secondAccount.getIdAccount(),
 				secondAccount.getUser().getLastnameUser());
 
-		bankJob.withdraw(secondAccount.getIdAccount(), 50);
+		// bankJob.withdraw(secondAccount.getIdAccount(), 50);
 		bankJob.deposit(secondAccount.getIdAccount(), 500);
-		bankJob.listTransactionOfAccount(200300400);
+		bankJob.displayAccountTransactions(200300400);
 
 	}
 }

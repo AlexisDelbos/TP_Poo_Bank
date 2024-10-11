@@ -1,5 +1,7 @@
 package fr.fms.business;
 
+import javax.security.auth.login.AccountNotFoundException;
+
 import fr.fms.entities.Account;
 
 public interface IBank {
@@ -11,7 +13,7 @@ public interface IBank {
 	public void deposit(int accountId, double amount);
 
 	// Retirer de l'argent d'un compte
-	public void withdraw(int idAccount, double amount);
+	public void withdraw(int idAccount, double amount) throws AccountNotFoundException, Exception;
 
 	// Transférer de l'argent entre deux comptes
 	public void transferMoney(int startAccountId, int destinationAccountId, double amount);

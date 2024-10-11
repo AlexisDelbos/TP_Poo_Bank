@@ -16,23 +16,6 @@ public class Transaction {
 	private static List<Transaction> transactions = new ArrayList<>();
 	public static int transactionCounter = 0;
 
-	public Transaction(int idTransaction, Date dateTransaction, double amountTransaction, Account account) {
-		transactionCounter++;
-		idTransaction = transactionCounter;
-		this.dateTransaction = dateTransaction;
-		this.amountTransaction = amountTransaction;
-		this.account = account;
-		transactions.add(this);
-	}
-
-	public Transaction(int idTransaction, Date dateTransaction, double amountTransaction) {
-		this.idTransaction = idTransaction;
-		this.dateTransaction = dateTransaction;
-		this.amountTransaction = amountTransaction;
-		transactions.add(this);
-
-	}
-
 	public Transaction(Date dateTransaction, double amountTransaction, Account account) {
 		transactionCounter++;
 		idTransaction = transactionCounter;
